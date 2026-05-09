@@ -1,15 +1,19 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CI/CD Pipeline - Triển khai tự động với GitHub, Docker & AWS</title>
-    <meta name="description" content="Hướng dẫn xây dựng CI/CD Pipeline hoàn chỉnh sử dụng GitHub Actions, Docker, AWS ECS và ECR. Tự động hóa quy trình phát triển phần mềm.">
+    <meta name="description"
+        content="Hướng dẫn xây dựng CI/CD Pipeline hoàn chỉnh sử dụng GitHub Actions, Docker, AWS ECS và ECR. Tự động hóa quy trình phát triển phần mềm.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <!-- Floating particles background -->
     <div class="particles" id="particles"></div>
@@ -19,10 +23,11 @@
         <nav class="nav container">
             <a href="#" class="nav__logo">
                 <svg class="nav__logo-icon" viewBox="0 0 32 32" width="32" height="32" fill="none">
-                    <circle cx="16" cy="16" r="14" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                    <path d="M8 16 L14 22 L24 10" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                    <circle cx="16" cy="16" r="14" stroke="currentColor" stroke-width="1.5" fill="none" />
+                    <path d="M8 16 L14 22 L24 10" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                        stroke-linejoin="round" fill="none" />
                 </svg>
-                <span>CI/CD Pipeline</span>
+                <span>CI/CD Pipeline (Trường Ngô)</span>
             </a>
             <ul class="nav__menu" id="navMenu">
                 <li><a href="#about" class="nav__link">Giới thiệu</a></li>
@@ -31,7 +36,10 @@
                 <li><a href="#workflow" class="nav__link">Quy trình</a></li>
                 <li>
                     <a href="https://github.com" target="_blank" class="nav__link nav__link--github">
-                        <svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+                        <svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor">
+                            <path
+                                d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z" />
+                        </svg>
                         GitHub
                     </a>
                 </li>
@@ -51,11 +59,16 @@
                 <h1 class="hero__title">
                     <span class="hero__title-accent">CI/CD</span> Pipeline
                 </h1>
-                <p class="hero__subtitle">Tự động hóa quy trình phát triển và triển khai phần mềm với GitHub Actions, Docker và AWS.</p>
-                <p class="hero__description">Xây dựng pipeline hoàn chỉnh từ khi push code lên GitHub cho đến khi deploy lên AWS ECS — mọi thứ đều tự động, nhanh chóng và đáng tin cậy.</p>
+                <p class="hero__subtitle">Tự động hóa quy trình phát triển và triển khai phần mềm với GitHub Actions,
+                    Docker và AWS.</p>
+                <p class="hero__description">Xây dựng pipeline hoàn chỉnh từ khi push code lên GitHub cho đến khi deploy
+                    lên AWS ECS — mọi thứ đều tự động, nhanh chóng và đáng tin cậy.</p>
                 <div class="hero__actions">
                     <a href="#workflow" class="btn btn--primary">
-                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+                        </svg>
                         Bắt đầu ngay
                     </a>
                     <a href="#about" class="btn btn--outline">
@@ -96,24 +109,38 @@
             <div class="features-grid">
                 <div class="feature-card" data-animate>
                     <div class="feature-card__icon">
-                        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor"
+                            stroke-width="1.5">
+                            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+                        </svg>
                     </div>
                     <h3 class="feature-card__title">Tự động hóa hoàn toàn</h3>
-                    <p class="feature-card__desc">Từ commit code đến deploy production — toàn bộ quy trình được tự động hóa với GitHub Actions workflow.</p>
+                    <p class="feature-card__desc">Từ commit code đến deploy production — toàn bộ quy trình được tự động
+                        hóa với GitHub Actions workflow.</p>
                 </div>
                 <div class="feature-card" data-animate>
                     <div class="feature-card__icon">
-                        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+                        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor"
+                            stroke-width="1.5">
+                            <rect x="2" y="3" width="20" height="14" rx="2" />
+                            <path d="M8 21h8M12 17v4" />
+                        </svg>
                     </div>
                     <h3 class="feature-card__title">Container hóa ứng dụng</h3>
-                    <p class="feature-card__desc">Đóng gói ứng dụng trong Docker container để đảm bảo tính nhất quán trên mọi môi trường.</p>
+                    <p class="feature-card__desc">Đóng gói ứng dụng trong Docker container để đảm bảo tính nhất quán
+                        trên mọi môi trường.</p>
                 </div>
                 <div class="feature-card" data-animate>
                     <div class="feature-card__icon">
-                        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 6l-9.5 9.5-5-5L1 18"/><path d="M17 6h6v6"/></svg>
+                        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor"
+                            stroke-width="1.5">
+                            <path d="M23 6l-9.5 9.5-5-5L1 18" />
+                            <path d="M17 6h6v6" />
+                        </svg>
                     </div>
                     <h3 class="feature-card__title">Triển khai liên tục</h3>
-                    <p class="feature-card__desc">Deploy liên tục lên AWS ECS với zero downtime, đảm bảo ứng dụng luôn sẵn sàng phục vụ.</p>
+                    <p class="feature-card__desc">Deploy liên tục lên AWS ECS với zero downtime, đảm bảo ứng dụng luôn
+                        sẵn sàng phục vụ.</p>
                 </div>
             </div>
         </div>
@@ -124,12 +151,19 @@
         <div class="container about__container">
             <div class="about__content">
                 <span class="section-tag">CI/CD là gì?</span>
-                <h2 class="section-title">Tăng tốc quy trình phát triển với <span class="text-accent">Continuous Integration & Delivery</span></h2>
-                <p class="about__text"><strong>CI (Continuous Integration)</strong> là phương pháp tự động build và test code mỗi khi developer push thay đổi lên repository. Điều này giúp phát hiện lỗi sớm và đảm bảo code luôn ở trạng thái hoạt động.</p>
-                <p class="about__text"><strong>CD (Continuous Delivery/Deployment)</strong> là bước tiếp theo, tự động đưa code đã được test thành công lên môi trường staging hoặc production.</p>
+                <h2 class="section-title">Tăng tốc quy trình phát triển với <span class="text-accent">Continuous
+                        Integration & Delivery</span></h2>
+                <p class="about__text"><strong>CI (Continuous Integration)</strong> là phương pháp tự động build và test
+                    code mỗi khi developer push thay đổi lên repository. Điều này giúp phát hiện lỗi sớm và đảm bảo code
+                    luôn ở trạng thái hoạt động.</p>
+                <p class="about__text"><strong>CD (Continuous Delivery/Deployment)</strong> là bước tiếp theo, tự động
+                    đưa code đã được test thành công lên môi trường staging hoặc production.</p>
                 <div class="about__actions">
                     <a href="#pipeline" class="btn btn--primary">
-                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg>
                         Xem Pipeline
                     </a>
                     <a href="#tools" class="btn btn--outline">Công nghệ sử dụng</a>
@@ -170,12 +204,16 @@
             <div class="section-header">
                 <span class="section-tag">Quy trình CI/CD</span>
                 <h2 class="section-title">Các bước trong <span class="text-accent">Pipeline</span></h2>
-                <p class="section-desc">Mỗi lần push code, pipeline sẽ tự động thực hiện các bước sau để đưa ứng dụng lên production.</p>
+                <p class="section-desc">Mỗi lần push code, pipeline sẽ tự động thực hiện các bước sau để đưa ứng dụng
+                    lên production.</p>
             </div>
             <div class="features-showcase">
                 <div class="feature-item" data-animate>
                     <div class="feature-item__icon-wrap">
-                        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg>
+                        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
+                            stroke-width="1.5">
+                            <path d="M16 18l6-6-6-6M8 6l-6 6 6 6" />
+                        </svg>
                     </div>
                     <div class="feature-item__content">
                         <h3>1. Source Code</h3>
@@ -184,16 +222,26 @@
                 </div>
                 <div class="feature-item" data-animate>
                     <div class="feature-item__icon-wrap">
-                        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
+                            stroke-width="1.5">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                        </svg>
                     </div>
                     <div class="feature-item__content">
                         <h3>2. Build & Test</h3>
-                        <p>Tự động chạy unit test, integration test và kiểm tra chất lượng code với các công cụ linting.</p>
+                        <p>Tự động chạy unit test, integration test và kiểm tra chất lượng code với các công cụ linting.
+                        </p>
                     </div>
                 </div>
                 <div class="feature-item" data-animate>
                     <div class="feature-item__icon-wrap">
-                        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><circle cx="6" cy="6" r="1"/><circle cx="6" cy="18" r="1"/></svg>
+                        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
+                            stroke-width="1.5">
+                            <rect x="2" y="2" width="20" height="8" rx="2" />
+                            <rect x="2" y="14" width="20" height="8" rx="2" />
+                            <circle cx="6" cy="6" r="1" />
+                            <circle cx="6" cy="18" r="1" />
+                        </svg>
                     </div>
                     <div class="feature-item__content">
                         <h3>3. Docker Build</h3>
@@ -202,16 +250,23 @@
                 </div>
                 <div class="feature-item" data-animate>
                     <div class="feature-item__icon-wrap">
-                        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+                        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
+                            stroke-width="1.5">
+                            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12" />
+                        </svg>
                     </div>
                     <div class="feature-item__content">
                         <h3>4. Push to ECR</h3>
-                        <p>Đẩy Docker image lên Amazon ECR — registry lưu trữ container image an toàn và có khả năng mở rộng.</p>
+                        <p>Đẩy Docker image lên Amazon ECR — registry lưu trữ container image an toàn và có khả năng mở
+                            rộng.</p>
                     </div>
                 </div>
                 <div class="feature-item" data-animate>
                     <div class="feature-item__icon-wrap">
-                        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 10h-1.26A8 8 0 109 20h9a5 5 0 000-10z"/></svg>
+                        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
+                            stroke-width="1.5">
+                            <path d="M18 10h-1.26A8 8 0 109 20h9a5 5 0 000-10z" />
+                        </svg>
                     </div>
                     <div class="feature-item__content">
                         <h3>5. Deploy ECS</h3>
@@ -220,7 +275,11 @@
                 </div>
                 <div class="feature-item" data-animate>
                     <div class="feature-item__icon-wrap">
-                        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg>
+                        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
+                            stroke-width="1.5">
+                            <path d="M22 11.08V12a10 10 0 11-5.93-9.14" />
+                            <path d="M22 4L12 14.01l-3-3" />
+                        </svg>
                     </div>
                     <div class="feature-item__content">
                         <h3>6. Health Check</h3>
@@ -237,36 +296,59 @@
             <div class="section-header">
                 <span class="section-tag">Công nghệ sử dụng</span>
                 <h2 class="section-title">Bộ công cụ <span class="text-accent">DevOps</span> hiện đại</h2>
-                <p class="section-desc">Kết hợp các công cụ mạnh mẽ nhất để xây dựng pipeline CI/CD hoàn chỉnh và đáng tin cậy.</p>
+                <p class="section-desc">Kết hợp các công cụ mạnh mẽ nhất để xây dựng pipeline CI/CD hoàn chỉnh và đáng
+                    tin cậy.</p>
             </div>
             <div class="cloud-grid">
                 <div class="cloud-card" data-animate>
                     <div class="cloud-card__icon">
-                        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>
+                        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor"
+                            stroke-width="1.5">
+                            <path
+                                d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22" />
+                        </svg>
                     </div>
                     <h3 class="cloud-card__title">GitHub Actions</h3>
-                    <p class="cloud-card__desc">Nền tảng CI/CD tích hợp sẵn trong GitHub, dễ cấu hình với YAML workflow files.</p>
+                    <p class="cloud-card__desc">Nền tảng CI/CD tích hợp sẵn trong GitHub, dễ cấu hình với YAML workflow
+                        files.</p>
                 </div>
                 <div class="cloud-card cloud-card--highlight" data-animate>
                     <div class="cloud-card__icon">
-                        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><circle cx="6" cy="6" r="1"/><circle cx="6" cy="18" r="1"/></svg>
+                        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor"
+                            stroke-width="1.5">
+                            <rect x="2" y="2" width="20" height="8" rx="2" />
+                            <rect x="2" y="14" width="20" height="8" rx="2" />
+                            <circle cx="6" cy="6" r="1" />
+                            <circle cx="6" cy="18" r="1" />
+                        </svg>
                     </div>
                     <h3 class="cloud-card__title">Docker</h3>
-                    <p class="cloud-card__desc">Container hóa ứng dụng, đảm bảo chạy nhất quán trên mọi môi trường từ dev đến production.</p>
+                    <p class="cloud-card__desc">Container hóa ứng dụng, đảm bảo chạy nhất quán trên mọi môi trường từ
+                        dev đến production.</p>
                 </div>
                 <div class="cloud-card" data-animate>
                     <div class="cloud-card__icon">
-                        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><path d="M3.27 6.96L12 12.01l8.73-5.05M12 22.08V12"/></svg>
+                        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor"
+                            stroke-width="1.5">
+                            <path
+                                d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z" />
+                            <path d="M3.27 6.96L12 12.01l8.73-5.05M12 22.08V12" />
+                        </svg>
                     </div>
                     <h3 class="cloud-card__title">Amazon ECR</h3>
-                    <p class="cloud-card__desc">Container Registry của AWS, lưu trữ Docker image an toàn, tích hợp chặt chẽ với ECS.</p>
+                    <p class="cloud-card__desc">Container Registry của AWS, lưu trữ Docker image an toàn, tích hợp chặt
+                        chẽ với ECS.</p>
                 </div>
                 <div class="cloud-card" data-animate>
                     <div class="cloud-card__icon">
-                        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 10h-1.26A8 8 0 109 20h9a5 5 0 000-10z"/></svg>
+                        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor"
+                            stroke-width="1.5">
+                            <path d="M18 10h-1.26A8 8 0 109 20h9a5 5 0 000-10z" />
+                        </svg>
                     </div>
                     <h3 class="cloud-card__title">Amazon ECS</h3>
-                    <p class="cloud-card__desc">Dịch vụ quản lý container của AWS, hỗ trợ auto scaling và load balancing tự động.</p>
+                    <p class="cloud-card__desc">Dịch vụ quản lý container của AWS, hỗ trợ auto scaling và load balancing
+                        tự động.</p>
                 </div>
             </div>
         </div>
@@ -278,7 +360,8 @@
             <div class="section-header">
                 <span class="section-tag">Lợi ích CI/CD</span>
                 <h2 class="section-title">Hiệu quả <span class="text-accent">vượt trội</span></h2>
-                <p class="section-desc">CI/CD giúp đội ngũ phát triển làm việc hiệu quả hơn với những con số ấn tượng:</p>
+                <p class="section-desc">CI/CD giúp đội ngũ phát triển làm việc hiệu quả hơn với những con số ấn tượng:
+                </p>
             </div>
             <div class="stats-grid">
                 <div class="stat-card" data-animate>
@@ -317,15 +400,21 @@
                 <div class="section-header">
                     <span class="section-tag">Bắt đầu</span>
                     <h2 class="section-title">Xây dựng <span class="text-accent">Pipeline</span> của bạn</h2>
-                    <p class="section-desc">Tạo file workflow trong repository GitHub của bạn và bắt đầu tự động hóa quy trình deploy ngay hôm nay.</p>
+                    <p class="section-desc">Tạo file workflow trong repository GitHub của bạn và bắt đầu tự động hóa quy
+                        trình deploy ngay hôm nay.</p>
                 </div>
                 <div class="download__actions">
                     <a href="https://docs.github.com/en/actions" target="_blank" class="btn btn--primary btn--lg">
-                        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z" />
+                            <path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z" />
+                        </svg>
                         Đọc tài liệu GitHub Actions
                     </a>
                 </div>
-                <p class="download__note">Tham khảo thêm tài liệu chính thức của AWS và Docker để hiểu rõ hơn về từng công cụ:</p>
+                <p class="download__note">Tham khảo thêm tài liệu chính thức của AWS và Docker để hiểu rõ hơn về từng
+                    công cụ:</p>
                 <a href="https://docs.aws.amazon.com/ecs/" target="_blank" class="btn btn--outline">
                     Tài liệu AWS ECS
                 </a>
@@ -339,8 +428,9 @@
             <div class="footer__brand">
                 <div class="footer__logo">
                     <svg class="nav__logo-icon" viewBox="0 0 32 32" width="28" height="28" fill="none">
-                        <circle cx="16" cy="16" r="14" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                        <path d="M8 16 L14 22 L24 10" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                        <circle cx="16" cy="16" r="14" stroke="currentColor" stroke-width="1.5" fill="none" />
+                        <path d="M8 16 L14 22 L24 10" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                            stroke-linejoin="round" fill="none" />
                     </svg>
                     <span>CI/CD Pipeline</span>
                 </div>
@@ -372,4 +462,5 @@
 
     <script src="script.js"></script>
 </body>
+
 </html>
