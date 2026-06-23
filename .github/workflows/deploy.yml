@@ -25,11 +25,38 @@ jobs:
         run: |
           curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
           -d "chat_id=${{ secrets.TELEGRAM_CHAT_ID }}" \
-          -d "text=🚀 Deploy Started%0ARepository: ${{ github.repository }}%0ABranch: ${{ github.ref_name }}%0AActor: ${{ github.actor }}"
+          -d "text=🚀 DEPLOY STARTED%0AWorkflow Run: #${{ github.run_number }}%0ARepository: ${{ github.repository }}%0ABranch: ${{ github.ref_name }}%0ACommit: ${{ github.event.head_commit.message }}"
 
       # ================= CHECKOUT =================
       - name: Checkout source code
         uses: actions/checkout@v4
+
+      # ================= NODE =================
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # ================= INSTALL VALIDATORS =================
+      - name: Install Validators
+        run: |
+          npm install -g htmlhint
+          npm install -g stylelint stylelint-config-standard
+
+      # ================= HTML CHECK =================
+      - name: Validate HTML
+        run: |
+          htmlhint index.html
+
+      # ================= CSS CHECK =================
+      - name: Validate CSS
+        run: |
+          stylelint "**/*.css"
+
+      # ================= JS CHECK =================
+      - name: Validate JavaScript
+        run: |
+          node --check script.js
 
       # ================= AWS LOGIN =================
       - name: Configure AWS Credentials
@@ -39,7 +66,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
-      # ================= ECR LOGIN =================
+      # ================= LOGIN ECR =================
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
@@ -48,6 +75,30 @@ jobs:
       - name: Build Docker Image
         run: |
           docker build -t $ECR_REPOSITORY:$IMAGE_TAG .
+
+      # ================= LOCAL TEST =================
+      - name: Run Test Container
+        run: |
+          docker run -d -p 8080:80 --name test-container $ECR_REPOSITORY:$IMAGE_TAG
+          sleep 5
+
+      # ================= LOCAL HEALTH CHECK =================
+      - name: Test Container Local
+        run: |
+          STATUS=$(curl -o /dev/null -s -w "%{http_code}" http://localhost:8080)
+
+          echo "Container status code: $STATUS"
+
+          if [ "$STATUS" != "200" ]; then
+            echo "Container test failed"
+            exit 1
+          fi
+
+      # ================= CLEAN TEST CONTAINER =================
+      - name: Remove Test Container
+        if: always()
+        run: |
+          docker rm -f test-container || true
 
       # ================= TAG IMAGE =================
       - name: Tag Docker Image
@@ -76,21 +127,17 @@ jobs:
             --cluster $ECS_CLUSTER \
             --services $ECS_SERVICE
 
-      # ================= WEBSITE HEALTH CHECK =================
-      - name: Check Website Health
+      # ================= PRODUCTION CHECK =================
+      - name: Check Production Website Health
         run: |
           STATUS=$(curl -o /dev/null -s -w "%{http_code}" $WEBSITE_URL)
 
-          echo "Website status code: $STATUS"
+          echo "Production status code: $STATUS"
 
           if [ "$STATUS" != "200" ]; then
-            echo "Website health check failed"
+            echo "Production website failed"
             exit 1
           fi
-
-      # ================= SUCCESS LOG =================
-      - name: Deploy Success
-        run: echo "Deployment completed successfully"
 
       # ================= TELEGRAM SUCCESS =================
       - name: Telegram Success Notification
@@ -99,7 +146,7 @@ jobs:
         run: |
           curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
           -d "chat_id=${{ secrets.TELEGRAM_CHAT_ID }}" \
-          -d "text=✅ Deploy SUCCESS%0ARepository: ${{ github.repository }}%0ACommit: ${{ github.sha }}%0AECS Service: ${{ env.ECS_SERVICE }}%0AWebsite: ${{ env.WEBSITE_URL }}%0AStatus: Healthy (200 OK)"
+          -d "text=✅ DEPLOY SUCCESS%0AWorkflow Run: #${{ github.run_number }}%0ACommit: ${{ github.event.head_commit.message }}%0ASHA: ${{ github.sha }}%0AService: ${{ env.ECS_SERVICE }}%0AStatus: Healthy"
 
       # ================= TELEGRAM FAILED =================
       - name: Telegram Failed Notification
@@ -108,4 +155,4 @@ jobs:
         run: |
           curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
           -d "chat_id=${{ secrets.TELEGRAM_CHAT_ID }}" \
-          -d "text=❌ Deploy FAILED%0ARepository: ${{ github.repository }}%0ABranch: ${{ github.ref_name }}%0ACheck GitHub Actions Logs"
+          -d "text=❌ DEPLOY FAILED%0AWorkflow Run: #${{ github.run_number }}%0ACommit: ${{ github.event.head_commit.message }}%0ABranch: ${{ github.ref_name }}%0AStopped before production deployment"
