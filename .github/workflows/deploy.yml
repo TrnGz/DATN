@@ -25,7 +25,7 @@ jobs:
         run: |
           curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
           -d "chat_id=${{ secrets.TELEGRAM_CHAT_ID }}" \
-          -d "text=🚀 DEPLOY STARTED%0AWorkflow Run: #${{ github.run_number }}%0ARepository: ${{ github.repository }}%0ABranch: ${{ github.ref_name }}%0ACommit: ${{ github.event.head_commit.message }}"
+          -d "text=🚀 DEPLOY STARTED%0A%0AWorkflow: #${{ github.run_number }}%0ARepository: ${{ github.repository }}%0ABranch: ${{ github.ref_name }}%0ACommit: ${{ github.event.head_commit.message }}%0AActor: ${{ github.actor }}"
 
       # ===== CHECKOUT =====
       - name: Checkout source code
@@ -43,16 +43,25 @@ jobs:
           npm install -g htmlhint
 
       # ===== HTML CHECK =====
+      - name: Set Current Step
+        run: echo "CURRENT_STEP=HTML Validation" >> $GITHUB_ENV
+
       - name: Validate HTML
         run: |
           htmlhint index.html
 
       # ===== JS CHECK =====
+      - name: Set Current Step
+        run: echo "CURRENT_STEP=JavaScript Validation" >> $GITHUB_ENV
+
       - name: Validate JavaScript
         run: |
           node --check script.js
 
       # ===== AWS LOGIN =====
+      - name: Set Current Step
+        run: echo "CURRENT_STEP=AWS Credentials" >> $GITHUB_ENV
+
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -61,28 +70,43 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
 
       # ===== LOGIN ECR =====
+      - name: Set Current Step
+        run: echo "CURRENT_STEP=ECR Login" >> $GITHUB_ENV
+
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
       # ===== BUILD IMAGE =====
+      - name: Set Current Step
+        run: echo "CURRENT_STEP=Docker Build" >> $GITHUB_ENV
+
       - name: Build Docker Image
         run: |
           docker build -t $ECR_REPOSITORY:$IMAGE_TAG .
 
       # ===== TAG IMAGE =====
+      - name: Set Current Step
+        run: echo "CURRENT_STEP=Docker Tagging" >> $GITHUB_ENV
+
       - name: Tag Docker Image
         run: |
           docker tag $ECR_REPOSITORY:$IMAGE_TAG \
           ${{ steps.login-ecr.outputs.registry }}/$ECR_REPOSITORY:$IMAGE_TAG
 
       # ===== PUSH IMAGE =====
+      - name: Set Current Step
+        run: echo "CURRENT_STEP=Push To ECR" >> $GITHUB_ENV
+
       - name: Push Docker Image to ECR
         run: |
           docker push \
           ${{ steps.login-ecr.outputs.registry }}/$ECR_REPOSITORY:$IMAGE_TAG
 
       # ===== DEPLOY ECS =====
+      - name: Set Current Step
+        run: echo "CURRENT_STEP=Deploy ECS Service" >> $GITHUB_ENV
+
       - name: Deploy to ECS Service
         run: |
           aws ecs update-service \
@@ -91,6 +115,9 @@ jobs:
             --force-new-deployment
 
       # ===== WAIT ECS =====
+      - name: Set Current Step
+        run: echo "CURRENT_STEP=Wait ECS Stable" >> $GITHUB_ENV
+
       - name: Wait for ECS Stable
         run: |
           aws ecs wait services-stable \
@@ -98,11 +125,12 @@ jobs:
             --services $ECS_SERVICE
 
       # ===== WEBSITE HEALTH CHECK =====
+      - name: Set Current Step
+        run: echo "CURRENT_STEP=Website Health Check" >> $GITHUB_ENV
+
       - name: Check Website Health
         run: |
           STATUS=$(curl -o /dev/null -s -w "%{http_code}" $WEBSITE_URL)
-
-          echo "Website status code: $STATUS"
 
           if [ "$STATUS" != "200" ]; then
             echo "Website health check failed"
@@ -114,9 +142,11 @@ jobs:
         if: success()
         continue-on-error: true
         run: |
+          STATUS=$(curl -o /dev/null -s -w "%{http_code}" $WEBSITE_URL)
+
           curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
           -d "chat_id=${{ secrets.TELEGRAM_CHAT_ID }}" \
-          -d "text=✅ DEPLOY SUCCESS%0AWorkflow Run: #${{ github.run_number }}%0ACommit: ${{ github.event.head_commit.message }}%0ASHA: ${{ github.sha }}%0AService: ${{ env.ECS_SERVICE }}%0AWebsite OK (200)"
+          -d "text=✅ DEPLOY SUCCESS%0A%0AWorkflow: #${{ github.run_number }}%0ACommit: ${{ github.event.head_commit.message }}%0ASHA: ${{ github.sha }}%0AActor: ${{ github.actor }}%0A%0AService: ${{ env.ECS_SERVICE }}%0AWebsite: ${{ env.WEBSITE_URL }}%0AHTTP Status: ${STATUS} OK%0A%0ADeployment completed successfully"
 
       # ===== TELEGRAM FAILED =====
       - name: Telegram Failed Notification
@@ -125,4 +155,4 @@ jobs:
         run: |
           curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
           -d "chat_id=${{ secrets.TELEGRAM_CHAT_ID }}" \
-          -d "text=❌ DEPLOY FAILED%0AWorkflow Run: #${{ github.run_number }}%0ACommit: ${{ github.event.head_commit.message }}%0ABranch: ${{ github.ref_name }}%0AStopped before deployment completed"
+          -d "text=❌ DEPLOY FAILED%0A%0AWorkflow: #${{ github.run_number }}%0ACommit: ${{ github.event.head_commit.message }}%0AActor: ${{ github.actor }}%0A%0AFailed Step:%0A${CURRENT_STEP}%0A%0ACheck Logs:%0Ahttps://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
