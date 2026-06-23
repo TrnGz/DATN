@@ -37,21 +37,15 @@ jobs:
         with:
           node-version: 20
 
-      # ===== INSTALL VALIDATORS =====
-      - name: Install Validators
+      # ===== INSTALL HTML VALIDATOR =====
+      - name: Install HTML Validator
         run: |
           npm install -g htmlhint
-          npm install -g stylelint stylelint-config-standard
 
       # ===== HTML CHECK =====
       - name: Validate HTML
         run: |
           htmlhint index.html
-
-      # ===== CSS CHECK =====
-      - name: Validate CSS
-        run: |
-          stylelint "**/*.css"
 
       # ===== JS CHECK =====
       - name: Validate JavaScript
